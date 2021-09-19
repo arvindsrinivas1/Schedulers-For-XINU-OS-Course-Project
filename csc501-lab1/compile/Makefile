@@ -492,6 +492,23 @@ write.o: ../sys/write.c /usr/include/stdc-predef.h ../h/conf.h \
  ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/io.h
 xdone.o: ../sys/xdone.c /usr/include/stdc-predef.h ../h/kernel.h \
  ../h/systypes.h ../h/conf.h ../h/mem.h ../h/stdio.h
+insert.o: ../TMP/insert.c /usr/include/stdc-predef.h ../h/conf.h \
+ ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/q.h
+main.o: ../TMP/main.c /usr/include/stdc-predef.h ../h/conf.h \
+ ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/q.h ../h/sched.h \
+ ../h/stdio.h ../h/math.h
+math.o: ../TMP/math.c /usr/include/stdc-predef.h ../h/conf.h \
+ ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/proc.h ../h/stdio.h \
+ ../h/math.h
+ready.o: ../TMP/ready.c /usr/include/stdc-predef.h ../h/conf.h \
+ ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/proc.h ../h/q.h \
+ ../h/sched.h
+resched.o: ../TMP/resched.c /usr/include/stdc-predef.h ../h/conf.h \
+ ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/proc.h ../h/q.h \
+ ../h/math.h ../h/sched.h
+sched.o: ../TMP/sched.c /usr/include/stdc-predef.h ../h/conf.h \
+ ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/proc.h ../h/stdio.h \
+ ../h/sched.h
 ttyalloc.o: ../tty/ttyalloc.c /usr/include/stdc-predef.h ../h/conf.h \
  ../h/kernel.h ../h/systypes.h ../h/mem.h ../h/tty.h ../h/stdio.h
 ttycntl.o: ../tty/ttycntl.c /usr/include/stdc-predef.h ../h/conf.h \

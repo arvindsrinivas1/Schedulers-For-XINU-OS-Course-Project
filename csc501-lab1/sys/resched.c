@@ -110,7 +110,7 @@ int resched()
 	// I'm handling nullproc by not putting it in rdyqueue. This is because we wont use the null proc until the
 	// rdy queue is empty anyway.
 	if(schedule_class == EXPDISTSCHED || schedule_class == 322){
-		randval = expdev(0.1);
+		randval = (int) expdev(0.1);
 	if(q[rdyhead].qnext == rdytail && q[rdytail].qprev == rdyhead){
 		//empty rdyqueue
 		if(optr->pstate == PRCURR){
@@ -166,7 +166,7 @@ int resched()
 		}
 	}
 	else{
-		while(q[next].qkey < randval && next < NPROC){
+		while(q[next].qkey <= randval && next < NPROC){
 			next = q[next].qnext;
 		}
 		//max value of next here can be rdytail	
@@ -196,6 +196,7 @@ int resched()
 		}
 
 		else{
+			//Hence if currpid has prio same as next's prio then CS happens. Round robin is implemented.
 			if(optr->pstate == PRCURR && (optr->pprio > randval && optr->pprio < q[next].qkey)){
 				#ifdef RTCLOCK
 					preempt = QUANTUM;
@@ -325,13 +326,12 @@ int resched()
 
 	else {
 	// DEAD CODE - THIS NEVER RUNS
-	//kprintf("\nNO WAY!\n");
 	/* no switch needed if current process priority higher than next*/
 	if ( ( (optr= &proctab[currpid])->pstate == PRCURR) &&
 	   (lastkey(rdytail)<optr->pprio)) {
 		return(OK);
 	}
-	
+
 	/* force context switch */
 
 	if (optr->pstate == PRCURR) {
@@ -340,7 +340,6 @@ int resched()
 			insert(currpid,rdyhead,optr->pprio);
 		}
 	}
-
 	/* remove highest priority process at end of ready list */
 	if(q[rdyhead].qnext == rdytail && q[rdytail].qprev == rdyhead){
 		nptr = &proctab[NULLPROC];
@@ -354,7 +353,7 @@ int resched()
 #endif
 	
 	ctxsw((int)&optr->pesp, (int)optr->pirmask, (int)&nptr->pesp, (int)nptr->pirmask);
-	
+
 	/* The OLD process returns here when resumed. */
 	return OK;
 	}
