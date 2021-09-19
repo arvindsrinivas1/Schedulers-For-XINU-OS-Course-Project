@@ -1,0 +1,32 @@
+1)
+Advantages of Exponential Scheduler:
+	i) The Exponential Scheduler(ES) employs the use a probability distribution function(generator function) to choose the next process. In this policy, a long running process cannot take up all the space just because it has a high priority because during every scheduling task, a random number is generated and it is used to choose the next function. Hence, starvation is avoided to some extent (better than the default XINU scheduler)
+	ii) In the normal scheduler, we can only say that if a process has more priority, it will be scheduled before other processes with lower priority. But in this, since it follows a distribution function, we can say probability/percentage of a process to be run. Also, we can tweak the value of lambda(taken as 0.1 in our case) to adjust the probability value.
+
+Disadvantages of Exponential Scheduler:
+	i) Before scheduling a process, we must calculate the random value everytime. This adds additional time to the scheduler time which was not there in the default xinu scheduler.
+	ii) The number of times context switch happens in this scheduling policy will be more than the number of times in the default xinu scheduling policy. Although this is important to make the system more 'interactive', it does add a bit of overhead.(In the default scheduler we only context switch if there is a new process with higher priority or if the current process finishes/waits/sleeps).
+
+
+Advantages of Linux-like scheduler:
+	i) This scheduling policy is more fair, since each process is given it's own quantum slice and a dynamic priority(goodness value). The dynamic priority is not only calculated based on the priority of the process but also the remaining quantum slice time. So if 2 processes have equal priority and quantum are there and if one of them has run for a lesser time, it will have more priority over the process which has run for more time. Also, a process cannot run within an epoch if it's quantum slice is exhausted. This allows other processes to run in that epoch. This technique prevents a long process from occupying the processor continuously.
+
+Disadvantages of Linux-like scheduler:
+	i) This scheduling policy requires us to have additional variables like counter[], quantum[] etc. Also, we have to calculate the quantum for every epoch, check if an epoch has ended and also calculate goodness values. Hence using this scheduling policy occupies more space(although this little increase in memory usage will not affect operating systems on our usual 32bit/64bit PCs, if the same logic is implemented in an embedded system with limited memory, it may be of concern) and the scheduler runs for more time becuase of the calculation overhead. In Xinu, number of processes is limited to 50(NPROC). If this policy is implemented on systems that allow more processes, the space occupied to store the new variables will also increase.
+
+Advantage of Xinu scheduler:
+	i) The Xinu scheduler is very simple, in that it does not require additional memory (variables) for its working or does not do additional computation. The only conditional check if the value of priority of the process and it's state. This make the scheduling happen faster compared to the other 2.
+
+Disadvantages of Xinu Scheduler:
+	i) One major problem is starvation of processes with lower priority. If a huge process with higher priority is present, processes with lower priority must wait until it finishes or it sleeps/waits. 
+
+
+2)
+Exponential Scheduler:
+	This policy allows the nullprocess to run only when there are no other processes in the ready queue. Hence, a null process can run only when all the other processes are in wait/sleep/blocked state or if there are no other remaining processes. If nullproc is running and a process comes out of blocked state or a new process comes in, nullproc will be preempted out.
+
+Linux-based scheduler:
+	In this, we end an epoch if no processes are there in the rdy queue. This could be that all have completed/in wait/sleep/blocked state. So a nullproc can run only when the ready queue is empty during the begining of an epoch. During the epoch if a blocked process becomes ready, then that is run and nullproc is preempted out. Another case when nullproc can run is if there are no other processes in the system(rdy queue is again empty in this case). If there are no processes in the system during the begining of an epoch, the nullprocess will run for the whole epoch, even if a new process enters during this epoch. 
+ 
+Default Scheduler:
+	This policy chooses a process by comparing priorities. NullProc has priority 0 and hence will always be picked to run only when there are no processes in the ready queue. If a process comes out of blocked state or if a new process enters the system, nullprocess will be preempted out.
